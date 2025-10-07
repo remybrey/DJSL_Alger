@@ -16,6 +16,20 @@ L'application sera réalisée en **PHP** (serveur), avec une interface web en **
 
 Les éléments fonctionnels décrits ci-dessous doivent donc être transposés dans cette pile technologique, en s'assurant que chaque contrôle métier possède son équivalent dans la logique PHP/MySQL et, lorsque pertinent, dans les scripts JavaScript pour améliorer l'ergonomie sans remplacer les validations serveur.
 
+### Prototype applicatif (structure actuelle)
+
+Un socle PHP minimal est désormais livré dans le dépôt pour matérialiser les modules Ligue, Club
+et les référentiels sous forme d'interfaces statiques validant déjà les principales règles de
+cohérence (Filles + Garçons = Total, somme des catégories, encadrement H/F, etc.).
+
+**Structure des dossiers**
+
+- `public/` — point d'entrée web (`index.php`) et assets (`assets/css`, `assets/js`).
+- `pages/` — vues PHP dédiées à chaque module (tableau de bord, ligue, club, référentiels, workflow, reporting).
+- `templates/` — fragments partagés (entête, navigation, pied de page).
+- `src/` — bootstrap, autoload et classes d'infrastructure (`Support\Config`, `Database\Connection`).
+- `config/database.example.php` — exemple de configuration MySQL à dupliquer en `config/database.php`.
+
 ### Tester l'application dans cet environnement
 
 Pour vérifier le bon fonctionnement de l'application dans ce socle PHP/HTML/CSS/JS/MySQL, procéder comme suit :
@@ -34,7 +48,8 @@ Pour vérifier le bon fonctionnement de l'application dans ce socle PHP/HTML/CSS
    - Vérifier que les référentiels fermés (disciplines, catégories d'âge, rôles, types d'officiels, installations) sont bien chargés.
 
 4. **Démarrer le serveur applicatif**
-   - Utiliser le serveur de développement PHP : `php -S localhost:8000 -t public/` ou la commande équivalente du framework.
+   - Utiliser le serveur de développement PHP : `php -S localhost:8000 -t public/` (le répertoire `public/` contient désormais
+     l'interface prototype).
    - En production, privilégier Apache/Nginx avec PHP-FPM et un fichier `public/index.php` comme point d'entrée.
 
 5. **Exécuter les tests automatisés**
