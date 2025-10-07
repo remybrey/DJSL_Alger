@@ -4,6 +4,18 @@
 
 Ce document décrit les besoins fonctionnels et les règles de gestion du lot **DJSL Alger**. La priorisation suit l'ordre demandé : d'abord le **module Ligue**, puis le **module Club**, avant les modules transverses. Toutes les informations sont rédigées en français et ne comportent aucun élément de code.
 
+## Cadre technico-fonctionnel
+
+L'application sera réalisée en **PHP** (serveur), avec une interface web en **HTML/CSS** et des interactions dynamiques en **JavaScript**. Les données seront persistées dans une base **MySQL**. Ce choix implique :
+
+- une architecture MVC ou équivalente côté PHP pour séparer la logique de présentation, de contrôle et d'accès aux données ;
+- des formulaires HTML sécurisés par des contrôles côté client (JavaScript) et côté serveur (PHP) avant insertion MySQL ;
+- l'utilisation de feuilles de style CSS pour garantir une interface uniforme sur les modules Ligue et Club ;
+- des requêtes SQL préparées afin de respecter les contraintes de sécurité (SQL injection, encodage) et d'assurer les agrégations nécessaires (somme des effectifs, contrôles de cohérence) ;
+- la génération des exports (PDF, Excel/CSV) par des bibliothèques PHP compatibles, en cohérence avec les gabarits DJSL.
+
+Les éléments fonctionnels décrits ci-dessous doivent donc être transposés dans cette pile technologique, en s'assurant que chaque contrôle métier possède son équivalent dans la logique PHP/MySQL et, lorsque pertinent, dans les scripts JavaScript pour améliorer l'ergonomie sans remplacer les validations serveur.
+
 ---
 
 ## Module 1 — Ligue (wilaya)
@@ -27,6 +39,7 @@ Assurer la saisie, le contrôle et l'exploitation des données de la **Ligue de 
   - `Somme officiels par type = total officiels` (si total disponible).
 - Types et bornes : entiers ≥ 0, totaux obligatoires, catégories pré-remplies à 0.
 - Traçabilité : audit par utilisateur (saisie / validation), horodatage, conservation des valeurs avant/après.
+- Implémentation : les contrôles sont réalisés côté client (JavaScript) pour une remontée immédiate, puis revérifiés côté serveur (PHP) avant écriture MySQL ; les journaux d'audit sont persistés dans des tables dédiées.
 
 ### 4. Restitutions & exports
 - Vue Ligue par discipline : totaux, catégories, officiels, encadrement, compétitions, alertes de cohérence.
@@ -62,6 +75,7 @@ Suivre la saisie, le contrôle et l'exploitation des chiffres **au niveau des cl
   - `Somme encadrement (rôle × genre) = total encadrement`.
 - Types et bornes : entiers ≥ 0, totaux obligatoires, catégories/rôles pré-remplis à 0.
 - Traçabilité : audit par utilisateur (saisie / validation), horodatage, suivi avant/après.
+- Implémentation : validations JavaScript déclenchées à la saisie, réconciliées par des contrôles PHP et des transactions MySQL garantissant la cohérence des totaux et l'historisation.
 
 ### 4. Restitutions & exports
 - Vue Club : statut, cohérence (OK/KO), détails sections/catégories/encadrement/installations/palmarès.
