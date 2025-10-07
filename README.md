@@ -16,6 +16,40 @@ L'application sera réalisée en **PHP** (serveur), avec une interface web en **
 
 Les éléments fonctionnels décrits ci-dessous doivent donc être transposés dans cette pile technologique, en s'assurant que chaque contrôle métier possède son équivalent dans la logique PHP/MySQL et, lorsque pertinent, dans les scripts JavaScript pour améliorer l'ergonomie sans remplacer les validations serveur.
 
+### Tester l'application dans cet environnement
+
+Pour vérifier le bon fonctionnement de l'application dans ce socle PHP/HTML/CSS/JS/MySQL, procéder comme suit :
+
+1. **Préparer l'environnement**
+   - Installer PHP 8.x avec les extensions `pdo_mysql`, `mbstring`, `intl` et `zip` (nécessaires pour les exports).
+   - Installer Composer pour gérer les dépendances éventuelles (framework MVC, librairies PDF/Excel).
+   - Disposer d'un serveur MySQL (local ou conteneur) et créer une base `djsl_alger` avec un utilisateur dédié.
+
+2. **Configurer l'application**
+   - Copier le fichier `.env.example` (ou équivalent) en `.env` et renseigner les paramètres `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
+   - Générer la clé d'application et les assets (selon le framework utilisé) en exécutant les scripts Composer ou npm éventuels.
+
+3. **Initialiser la base**
+   - Lancer les migrations et jeux de données de référence : `php artisan migrate --seed`, `php bin/console doctrine:migrations:migrate`, ou tout autre script défini pour créer les tables (ligues, clubs, référentiels, utilisateurs...).
+   - Vérifier que les référentiels fermés (disciplines, catégories d'âge, rôles, types d'officiels, installations) sont bien chargés.
+
+4. **Démarrer le serveur applicatif**
+   - Utiliser le serveur de développement PHP : `php -S localhost:8000 -t public/` ou la commande équivalente du framework.
+   - En production, privilégier Apache/Nginx avec PHP-FPM et un fichier `public/index.php` comme point d'entrée.
+
+5. **Exécuter les tests automatisés**
+   - Tests unitaires : `./vendor/bin/phpunit` (ou `php artisan test`).
+   - Tests de qualité front : `npm run lint` / `npm run test` si une stack JS est configurée.
+   - Tests d'intégration métier : scénarios Behat/Pest ou scripts personnalisés validant les contrôles (`Filles + Garçons = Total`, workflow Brouillon → Validé, exports générés).
+
+6. **Recette manuelle métier**
+   - Créer une session en **Brouillon** pour une discipline, saisir les effectifs totaux et par catégorie.
+   - Forcer une incohérence volontaire pour s'assurer du blocage (`Filles + Garçons ≠ Total`).
+   - Passer le workflow jusqu'à **Validé**, contrôler l'audit et télécharger les exports PDF/Excel.
+   - Rapprocher les totaux Clubs ⇄ Ligue pour confirmer les alertes en cas d'écart.
+
+Ces étapes offrent un socle commun pour valider que la réalisation respecte le cahier des charges tout en détectant rapidement les régressions.
+
 ---
 
 ## Module 1 — Ligue (wilaya)
